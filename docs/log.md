@@ -8,3 +8,13 @@
 - What I checked: the last log line said `No module named 'psycopg'`, and the traceback went through SQLAlchemy's psycopg (v3) dialect.
 - Root cause: DATABASE_URL had the wrong driver prefix; the app installs psycopg2.
 - Fix: changed the prefix to `postgresql+psycopg2://` in Render's environment settings; the redeploy went live.
+
+
+
+
+## One more thing that broke (MCP server)
+- Symptom: `ModuleNotFoundError: No module named 'mcp.server.fastmcp'` when importing the server.
+- What I checked: the error said this is mcp 2.x, where FastMCP was renamed. pip had installed 2.3.0 because the package was not pinned.
+- Fix: pinned `mcp<2` in `mcp_server/requirements.txt` and reinstalled (now mcp 1.30.0).
+- Side note: I first created the files in the wrong folder, outside the Git repo, and had to move them in.
+- Checked against the live API: list and get return the task, and an unknown id gives "task not found".
