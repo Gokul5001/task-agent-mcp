@@ -18,3 +18,8 @@
 - Fix: pinned `mcp<2` in `mcp_server/requirements.txt` and reinstalled (now mcp 1.30.0).
 - Side note: I first created the files in the wrong folder, outside the Git repo, and had to move them in.
 - Checked against the live API: list and get return the task, and an unknown id gives "task not found".
+
+
+
+## MCP server tests
+- Added 7 tests with a fake API (httpx MockTransport) covering list, get, status filter, 404, 409 and empty updates. They need no network. All tests pass.
