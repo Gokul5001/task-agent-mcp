@@ -71,6 +71,11 @@ def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)
     task = db.get(Task, task_id)
     if task is None:
         raise HTTPException(status_code=404, detail="task not found")
+    if payload.status is not None and task.status in (
+        TaskStatus.done.value,
+        TaskStatus.failed.value,
+    ):
+        raise HTTPException(status_code=409, detail="task already finished")
     if payload.status is not None:
         task.status = payload.status.value
     if payload.result is not None:
