@@ -90,3 +90,16 @@ def test_update_with_nothing_makes_no_request(monkeypatch):
     monkeypatch.setattr(server, "make_client", fake_api(handler))
     with pytest.raises(ValueError, match="nothing to update"):
         server.update_task(1)
+
+
+
+
+def test_update_with_invalid_status_says_invalid_input(monkeypatch):
+    def handler(request):
+        return httpx.Response(422, json={"detail": "invalid status"})
+
+    monkeypatch.setattr(server, "make_client", fake_api(handler))
+    with pytest.raises(ValueError, match="invalid input"):
+        server.update_task(1, status="nonsense")
+
+        
