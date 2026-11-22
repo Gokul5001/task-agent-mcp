@@ -80,3 +80,12 @@ def test_patch_invalid_status(client):
 
 def test_patch_not_found(client):
     assert client.patch("/tasks/999", json={"status": "done"}).status_code == 404
+
+
+def test_finished_task_status_cannot_change(client):
+    created = make_task(client).json()
+    client.patch(f"/tasks/{created['id']}", json={"status": "done"})
+    response = client.patch(f"/tasks/{created['id']}", json={"status": "open"})
+    assert response.status_code == 409
+
+    
