@@ -23,3 +23,10 @@
 
 ## MCP server tests
 - Added 7 tests with a fake API (httpx MockTransport) covering list, get, status filter, 404, 409 and empty updates. They need no network. All tests pass.
+
+
+
+## A test caught a bug in the MCP server
+- Symptom: calling update_task with an invalid status gave a raw httpx 422 error instead of a clear tool error, which my design requires.
+- How I found it: ran the tool against the live API with status "nonsense", then wrote a test that failed as expected (1 failed, 19 passed).
+- Fix: map 422 to ValueError("invalid input: ...") in _call. All 20 tests pass.

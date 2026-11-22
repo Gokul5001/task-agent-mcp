@@ -19,9 +19,10 @@ def _call(method: str, path: str, **kwargs):
         raise ValueError("task not found")
     if response.status_code == 409:
         raise ValueError("task already finished")
+    if response.status_code == 422:
+        raise ValueError(f"invalid input: {response.text}")
     response.raise_for_status()
     return response.json()
-
 
 @mcp.tool()
 def list_tasks(status: str | None = None) -> list[dict]:
